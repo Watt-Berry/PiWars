@@ -1,0 +1,7 @@
+vtkCommonColor
+vtkColorSeries
+vtkNamedColors
+vtkCommonColorModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonDataModel

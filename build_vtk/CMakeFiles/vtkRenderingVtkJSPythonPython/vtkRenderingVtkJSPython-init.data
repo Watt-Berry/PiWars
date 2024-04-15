@@ -1,0 +1,7 @@
+vtkRenderingVtkJS
+vtkVtkJSSceneGraphSerializer
+vtkVtkJSViewNodeFactory
+vtkRenderingVtkJSModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkRenderingSceneGraph

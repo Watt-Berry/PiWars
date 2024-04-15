@@ -1,0 +1,8 @@
+vtkIOXMLParser
+vtkXMLDataParser
+vtkXMLParser
+vtkXMLUtilities
+vtkIOXMLParserModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonDataModel

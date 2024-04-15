@@ -1,0 +1,6 @@
+vtkIOCesium3DTiles
+vtkCesium3DTilesWriter
+vtkCesiumPointCloudWriter
+vtkIOCesium3DTilesModule
+DEPENDS
+vtkmodules.vtkIOCore

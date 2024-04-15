@@ -1,0 +1,5 @@
+vtkCommonPython
+vtkPythonArchiver
+vtkCommonPythonModule
+DEPENDS
+vtkmodules.vtkCommonCore

@@ -1,0 +1,17 @@
+/home/robsoc3/vtk-2/source/Parallel/Core/vtkCommunicator.h;vtkParallelCore
+/home/robsoc3/vtk-2/source/Parallel/Core/vtkDummyCommunicator.h;vtkParallelCore
+/home/robsoc3/vtk-2/source/Parallel/Core/vtkDummyController.h;vtkParallelCore
+/home/robsoc3/vtk-2/source/Parallel/Core/vtkFieldDataSerializer.h;vtkParallelCore
+/home/robsoc3/vtk-2/source/Parallel/Core/vtkMultiProcessController.h;vtkParallelCore
+/home/robsoc3/vtk-2/source/Parallel/Core/vtkMultiProcessStream.h;vtkParallelCore
+/home/robsoc3/vtk-2/source/Parallel/Core/vtkPDirectory.h;vtkParallelCore
+/home/robsoc3/vtk-2/source/Parallel/Core/vtkProcess.h;vtkParallelCore
+/home/robsoc3/vtk-2/source/Parallel/Core/vtkProcessGroup.h;vtkParallelCore
+/home/robsoc3/vtk-2/source/Parallel/Core/vtkPSystemTools.h;vtkParallelCore
+/home/robsoc3/vtk-2/source/Parallel/Core/vtkSocketCommunicator.h;vtkParallelCore
+/home/robsoc3/vtk-2/source/Parallel/Core/vtkSocketController.h;vtkParallelCore
+/home/robsoc3/vtk-2/source/Parallel/Core/vtkSubCommunicator.h;vtkParallelCore
+/home/robsoc3/vtk-2/source/Parallel/Core/vtkSubGroup.h;vtkParallelCore
+/home/robsoc3/vtk-2/source/Parallel/Core/vtkThreadedCallbackQueue.h;vtkParallelCore
+/home/robsoc3/vtk-2/source/Parallel/Core/vtkThreadedTaskQueue.h;vtkParallelCore
+/home/robsoc3/vtk-2/build/Parallel/Core/vtkParallelCoreModule.h;vtkParallelCore

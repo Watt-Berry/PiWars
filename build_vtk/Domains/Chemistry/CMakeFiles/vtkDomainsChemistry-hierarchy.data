@@ -1,0 +1,13 @@
+/home/robsoc3/vtk-2/source/Domains/Chemistry/vtkBlueObeliskData.h;vtkDomainsChemistry
+/home/robsoc3/vtk-2/source/Domains/Chemistry/vtkBlueObeliskDataParser.h;vtkDomainsChemistry
+/home/robsoc3/vtk-2/source/Domains/Chemistry/vtkMoleculeMapper.h;vtkDomainsChemistry
+/home/robsoc3/vtk-2/source/Domains/Chemistry/vtkMoleculeToAtomBallFilter.h;vtkDomainsChemistry
+/home/robsoc3/vtk-2/source/Domains/Chemistry/vtkMoleculeToBondStickFilter.h;vtkDomainsChemistry
+/home/robsoc3/vtk-2/source/Domains/Chemistry/vtkMoleculeToLinesFilter.h;vtkDomainsChemistry
+/home/robsoc3/vtk-2/source/Domains/Chemistry/vtkMoleculeToPolyDataFilter.h;vtkDomainsChemistry
+/home/robsoc3/vtk-2/source/Domains/Chemistry/vtkPeriodicTable.h;vtkDomainsChemistry
+/home/robsoc3/vtk-2/source/Domains/Chemistry/vtkPointSetToMoleculeFilter.h;vtkDomainsChemistry
+/home/robsoc3/vtk-2/source/Domains/Chemistry/vtkProgrammableElectronicData.h;vtkDomainsChemistry
+/home/robsoc3/vtk-2/source/Domains/Chemistry/vtkProteinRibbonFilter.h;vtkDomainsChemistry
+/home/robsoc3/vtk-2/source/Domains/Chemistry/vtkSimpleBondPerceiver.h;vtkDomainsChemistry
+/home/robsoc3/vtk-2/build/Domains/Chemistry/vtkDomainsChemistryModule.h;vtkDomainsChemistry

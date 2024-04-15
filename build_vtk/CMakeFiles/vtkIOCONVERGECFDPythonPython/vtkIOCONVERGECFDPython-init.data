@@ -1,0 +1,7 @@
+vtkIOCONVERGECFD
+vtkCONVERGECFDReader
+vtkIOCONVERGECFDModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonDataModel
+vtkmodules.vtkCommonExecutionModel

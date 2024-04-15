@@ -1,0 +1,11 @@
+vtkImagingSources
+vtkImageCanvasSource2D
+vtkImageEllipsoidSource
+vtkImageGaussianSource
+vtkImageGridSource
+vtkImageMandelbrotSource
+vtkImageNoiseSource
+vtkImageSinusoidSource
+vtkImagingSourcesModule
+DEPENDS
+vtkmodules.vtkCommonExecutionModel

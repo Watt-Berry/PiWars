@@ -1,0 +1,14 @@
+vtkGeovisCore
+vtkGeoProjection
+vtkGeoTransform
+vtkGeovisCoreModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonDataModel
+vtkmodules.vtkCommonExecutionModel
+vtkmodules.vtkCommonTransforms
+vtkmodules.vtkInfovisCore
+vtkmodules.vtkInteractionStyle
+vtkmodules.vtkInteractionWidgets
+vtkmodules.vtkRenderingCore
+vtkmodules.vtkViewsCore

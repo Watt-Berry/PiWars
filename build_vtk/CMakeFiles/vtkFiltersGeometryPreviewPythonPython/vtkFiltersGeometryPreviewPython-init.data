@@ -1,0 +1,9 @@
+vtkFiltersGeometryPreview
+vtkOctreeImageToPointSetFilter
+vtkPointSetToOctreeImageFilter
+vtkPointSetStreamer
+vtkFiltersGeometryPreviewModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonDataModel
+vtkmodules.vtkCommonExecutionModel

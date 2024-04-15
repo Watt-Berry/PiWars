@@ -1,0 +1,7 @@
+vtkIOSegY
+vtkSegYReader
+vtkIOSegYModule
+DEPENDS
+vtkmodules.vtkCommonDataModel
+vtkmodules.vtkCommonExecutionModel
+vtkmodules.vtkIOImage

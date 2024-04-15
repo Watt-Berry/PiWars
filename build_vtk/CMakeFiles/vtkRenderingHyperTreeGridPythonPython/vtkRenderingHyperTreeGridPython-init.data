@@ -1,0 +1,9 @@
+vtkRenderingHyperTreeGrid
+vtkHyperTreeGridMapper
+vtkRenderingHyperTreeGridModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonDataModel
+vtkmodules.vtkCommonExecutionModel
+vtkmodules.vtkCommonMath
+vtkmodules.vtkRenderingCore

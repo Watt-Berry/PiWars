@@ -1,0 +1,7 @@
+vtkIOExportGL2PS
+vtkGL2PSExporter
+vtkOpenGLGL2PSExporter
+vtkIOExportGL2PSModule
+DEPENDS
+vtkmodules.vtkIOExport
+vtkmodules.vtkRenderingGL2PSOpenGL2

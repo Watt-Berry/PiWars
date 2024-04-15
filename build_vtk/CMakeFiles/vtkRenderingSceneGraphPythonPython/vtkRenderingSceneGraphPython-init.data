@@ -1,0 +1,15 @@
+vtkRenderingSceneGraph
+vtkActorNode
+vtkCameraNode
+vtkLightNode
+vtkMapperNode
+vtkPolyDataMapperNode
+vtkRendererNode
+vtkViewNode
+vtkViewNodeFactory
+vtkVolumeMapperNode
+vtkVolumeNode
+vtkWindowNode
+vtkRenderingSceneGraphModule
+DEPENDS
+vtkmodules.vtkCommonCore

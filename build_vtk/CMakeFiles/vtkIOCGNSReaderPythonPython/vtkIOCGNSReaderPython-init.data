@@ -1,0 +1,9 @@
+vtkIOCGNSReader
+vtkCGNSFileSeriesReader
+vtkCGNSReader
+vtkIOCGNSReaderModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonDataModel
+vtkmodules.vtkCommonExecutionModel
+vtkmodules.vtkParallelCore

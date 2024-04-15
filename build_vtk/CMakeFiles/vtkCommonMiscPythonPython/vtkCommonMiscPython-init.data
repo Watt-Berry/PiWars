@@ -1,0 +1,12 @@
+vtkCommonMisc
+vtkContourValues
+vtkErrorCode
+vtkExprTkFunctionParser
+vtkFunctionParser
+vtkHeap
+vtkPolygonBuilder
+vtkResourceFileLocator
+vtkCommonMiscModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonMath

@@ -1,0 +1,13 @@
+vtkRenderingFreeType
+vtkFreeTypeStringToImage
+vtkFreeTypeTools
+vtkMathTextFreeTypeTextRenderer
+vtkMathTextUtilities
+vtkScaledTextActor
+vtkTextRendererStringToImage
+vtkVectorText
+vtkRenderingFreeTypeModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonExecutionModel
+vtkmodules.vtkRenderingCore

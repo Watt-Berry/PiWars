@@ -1,0 +1,11 @@
+vtkWebGLExporter
+vtkPVWebGLExporter
+vtkWebGLDataSet
+vtkWebGLExporter
+vtkWebGLObject
+vtkWebGLPolyData
+vtkWebGLWidget
+vtkWebGLExporterModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkIOExport

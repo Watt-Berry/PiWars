@@ -1,0 +1,9 @@
+vtkFiltersVerdict
+vtkBoundaryMeshQuality
+vtkCellQuality
+vtkCellSizeFilter
+vtkMatrixMathFilter
+vtkMeshQuality
+vtkFiltersVerdictModule
+DEPENDS
+vtkmodules.vtkCommonExecutionModel

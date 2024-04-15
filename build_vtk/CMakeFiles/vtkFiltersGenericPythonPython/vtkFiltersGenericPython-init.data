@@ -1,0 +1,14 @@
+vtkFiltersGeneric
+vtkGenericClip
+vtkGenericContourFilter
+vtkGenericCutter
+vtkGenericDataSetTessellator
+vtkGenericGeometryFilter
+vtkGenericGlyph3DFilter
+vtkGenericOutlineFilter
+vtkGenericProbeFilter
+vtkGenericStreamTracer
+vtkFiltersGenericModule
+DEPENDS
+vtkmodules.vtkCommonExecutionModel
+vtkmodules.vtkCommonMath

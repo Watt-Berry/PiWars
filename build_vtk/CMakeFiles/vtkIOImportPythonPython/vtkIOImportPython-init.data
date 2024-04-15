@@ -1,0 +1,13 @@
+vtkIOImport
+vtk3DS
+vtk3DSImporter
+vtkGLTFImporter
+vtkImporter
+vtkVRMLImporter
+vtkOBJImporter
+vtkIOImportModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonExecutionModel
+vtkmodules.vtkCommonMisc
+vtkmodules.vtkRenderingCore

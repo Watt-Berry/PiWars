@@ -1,0 +1,4 @@
+/home/robsoc3/vtk-2/source/Filters/Selection/vtkCellDistanceSelector.h;vtkFiltersSelection
+/home/robsoc3/vtk-2/source/Filters/Selection/vtkKdTreeSelector.h;vtkFiltersSelection
+/home/robsoc3/vtk-2/source/Filters/Selection/vtkLinearSelector.h;vtkFiltersSelection
+/home/robsoc3/vtk-2/build/Filters/Selection/vtkFiltersSelectionModule.h;vtkFiltersSelection

@@ -1,0 +1,7 @@
+vtkFiltersProgrammable
+vtkProgrammableAttributeDataFilter
+vtkProgrammableFilter
+vtkProgrammableGlyphFilter
+vtkFiltersProgrammableModule
+DEPENDS
+vtkmodules.vtkCommonExecutionModel

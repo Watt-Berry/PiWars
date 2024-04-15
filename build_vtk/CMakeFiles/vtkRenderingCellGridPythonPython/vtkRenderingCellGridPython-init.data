@@ -1,0 +1,11 @@
+vtkRenderingCellGrid
+vtkDGOpenGLRenderer
+vtkOpenGLCellGridMapper
+vtkOpenGLCellGridRenderRequest
+vtkRenderingCellGridModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonDataModel
+vtkmodules.vtkFiltersCellGrid
+vtkmodules.vtkRenderingCore
+vtkmodules.vtkRenderingOpenGL2

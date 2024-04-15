@@ -1,0 +1,9 @@
+vtkIOCellGrid
+vtkCellGridReader
+vtkIOCellGridModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonDataModel
+vtkmodules.vtkCommonExecutionModel
+vtkmodules.vtkIOCore
+vtkmodules.vtkFiltersCellGrid

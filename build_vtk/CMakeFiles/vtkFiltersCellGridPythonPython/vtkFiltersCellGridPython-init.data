@@ -1,0 +1,12 @@
+vtkFiltersCellGrid
+vtkCellGridComputeSurface
+vtkDGBoundsResponder
+vtkDGCell
+vtkDGHex
+vtkDGSidesResponder
+vtkDGTet
+vtkFiltersCellGridModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonDataModel
+vtkmodules.vtkCommonExecutionModel

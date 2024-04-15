@@ -1,0 +1,12 @@
+vtkFiltersAMR
+vtkAMRCutPlane
+vtkAMRGaussianPulseSource
+vtkAMRResampleFilter
+vtkAMRSliceFilter
+vtkAMRToMultiBlockFilter
+vtkImageToAMR
+vtkParallelAMRUtilities
+vtkFiltersAMRModule
+DEPENDS
+vtkmodules.vtkCommonDataModel
+vtkmodules.vtkCommonExecutionModel

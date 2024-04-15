@@ -1,0 +1,8 @@
+/home/robsoc3/vtk-2/source/Imaging/Sources/vtkImageCanvasSource2D.h;vtkImagingSources
+/home/robsoc3/vtk-2/source/Imaging/Sources/vtkImageEllipsoidSource.h;vtkImagingSources
+/home/robsoc3/vtk-2/source/Imaging/Sources/vtkImageGaussianSource.h;vtkImagingSources
+/home/robsoc3/vtk-2/source/Imaging/Sources/vtkImageGridSource.h;vtkImagingSources
+/home/robsoc3/vtk-2/source/Imaging/Sources/vtkImageMandelbrotSource.h;vtkImagingSources
+/home/robsoc3/vtk-2/source/Imaging/Sources/vtkImageNoiseSource.h;vtkImagingSources
+/home/robsoc3/vtk-2/source/Imaging/Sources/vtkImageSinusoidSource.h;vtkImagingSources
+/home/robsoc3/vtk-2/build/Imaging/Sources/vtkImagingSourcesModule.h;vtkImagingSources

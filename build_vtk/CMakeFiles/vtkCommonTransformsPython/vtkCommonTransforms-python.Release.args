@@ -1,0 +1,22 @@
+
+-D'kiss_fft_scalar=double'
+
+
+-I'/home/robsoc3/vtk-2/build/Common/Transforms'
+-I'/home/robsoc3/vtk-2/source/Common/Transforms'
+-I'/home/robsoc3/vtk-2/build/Common/Core'
+-I'/home/robsoc3/vtk-2/source/Common/Core'
+-I'/home/robsoc3/vtk-2/build/Utilities/KWIML'
+-I'/home/robsoc3/vtk-2/source/Utilities/KWIML'
+-I'/home/robsoc3/vtk-2/build/Utilities/KWSys'
+-I'/home/robsoc3/vtk-2/build/Utilities/KWSys'
+-I'/home/robsoc3/vtk-2/source/Utilities/KWSys'
+-I'/home/robsoc3/vtk-2/build/Common/Math'
+-I'/home/robsoc3/vtk-2/source/Common/Math'
+-I'/home/robsoc3/vtk-2/build/ThirdParty/kissfft/vtkkissfft'
+-I'/home/robsoc3/vtk-2/source/ThirdParty/kissfft/vtkkissfft'
+-I'/home/robsoc3/vtk-2/build/ThirdParty/kissfft'
+-I'/home/robsoc3/vtk-2/source/ThirdParty/kissfft'
+
+
+--types '/home/robsoc3/vtk-2/build/vtk-9.3.0.data/headers/hierarchy/vtkCommonTransforms-hierarchy.txt'

@@ -1,0 +1,12 @@
+vtkViewsCore
+vtkConvertSelectionDomain
+vtkDataRepresentation
+vtkEmptyRepresentation
+vtkRenderViewBase
+vtkView
+vtkViewTheme
+vtkViewsCoreModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonExecutionModel
+vtkmodules.vtkInteractionWidgets

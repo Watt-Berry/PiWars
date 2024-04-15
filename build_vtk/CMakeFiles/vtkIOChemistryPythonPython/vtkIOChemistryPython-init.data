@@ -1,0 +1,16 @@
+vtkIOChemistry
+vtkCMLMoleculeReader
+vtkGaussianCubeReader
+vtkGaussianCubeReader2
+vtkMoleculeReaderBase
+vtkPDBReader
+vtkVASPAnimationReader
+vtkVASPTessellationReader
+vtkXYZMolReader
+vtkXYZMolReader2
+vtkIOChemistryModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonDataModel
+vtkmodules.vtkCommonExecutionModel
+vtkmodules.vtkIOCore

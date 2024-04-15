@@ -1,0 +1,15 @@
+vtkImagingColor
+vtkImageHSIToRGB
+vtkImageHSVToRGB
+vtkImageLuminance
+vtkImageMapToRGBA
+vtkImageMapToWindowLevelColors
+vtkImageQuantizeRGBToIndex
+vtkImageRGBToHSI
+vtkImageRGBToHSV
+vtkImageRGBToYIQ
+vtkImageYIQToRGB
+vtkImagingColorModule
+DEPENDS
+vtkmodules.vtkCommonExecutionModel
+vtkmodules.vtkImagingCore

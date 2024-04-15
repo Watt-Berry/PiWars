@@ -1,0 +1,14 @@
+vtkRenderingContextOpenGL2
+vtkOpenGLContextActor
+vtkOpenGLContextBufferId
+vtkOpenGLContextDevice2D
+vtkOpenGLContextDevice3D
+vtkOpenGLPropItem
+vtkRenderingContextOpenGL2Module
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonDataModel
+vtkmodules.vtkRenderingContext2D
+vtkmodules.vtkRenderingCore
+vtkmodules.vtkRenderingFreeType
+vtkmodules.vtkRenderingOpenGL2

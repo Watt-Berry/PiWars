@@ -1,0 +1,6 @@
+vtkRenderingUI
+vtkGenericRenderWindowInteractor
+vtkXRenderWindowInteractor
+vtkRenderingUIModule
+DEPENDS
+vtkmodules.vtkRenderingCore

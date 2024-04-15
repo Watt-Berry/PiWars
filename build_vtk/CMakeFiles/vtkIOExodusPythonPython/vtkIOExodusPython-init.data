@@ -1,0 +1,17 @@
+vtkIOExodus
+vtkCPExodusIIElementBlock
+vtkCPExodusIIInSituReader
+vtkExodusIICache
+vtkExodusIIReader
+vtkExodusIIReaderParser
+vtkExodusIIWriter
+vtkModelMetadata
+vtkCPExodusIINodalCoordinatesTemplate
+vtkCPExodusIIResultsArrayTemplate
+vtkIOExodusModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonDataModel
+vtkmodules.vtkCommonExecutionModel
+vtkmodules.vtkIOCore
+vtkmodules.vtkIOXMLParser

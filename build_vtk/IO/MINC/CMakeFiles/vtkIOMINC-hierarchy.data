@@ -1,0 +1,11 @@
+/home/robsoc3/vtk-2/source/IO/MINC/vtkMINC.h;vtkIOMINC
+/home/robsoc3/vtk-2/source/IO/MINC/vtkMINCImageAttributes.h;vtkIOMINC
+/home/robsoc3/vtk-2/source/IO/MINC/vtkMINCImageReader.h;vtkIOMINC
+/home/robsoc3/vtk-2/source/IO/MINC/vtkMINCImageWriter.h;vtkIOMINC
+/home/robsoc3/vtk-2/source/IO/MINC/vtkMNIObjectReader.h;vtkIOMINC
+/home/robsoc3/vtk-2/source/IO/MINC/vtkMNIObjectWriter.h;vtkIOMINC
+/home/robsoc3/vtk-2/source/IO/MINC/vtkMNITagPointReader.h;vtkIOMINC
+/home/robsoc3/vtk-2/source/IO/MINC/vtkMNITagPointWriter.h;vtkIOMINC
+/home/robsoc3/vtk-2/source/IO/MINC/vtkMNITransformReader.h;vtkIOMINC
+/home/robsoc3/vtk-2/source/IO/MINC/vtkMNITransformWriter.h;vtkIOMINC
+/home/robsoc3/vtk-2/build/IO/MINC/vtkIOMINCModule.h;vtkIOMINC

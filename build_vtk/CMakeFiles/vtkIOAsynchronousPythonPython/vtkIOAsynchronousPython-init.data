@@ -1,0 +1,9 @@
+vtkIOAsynchronous
+vtkThreadedImageWriter
+vtkIOAsynchronousModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonExecutionModel
+vtkmodules.vtkIOCore
+vtkmodules.vtkIOImage
+vtkmodules.vtkIOXML

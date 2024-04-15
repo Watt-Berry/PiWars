@@ -1,0 +1,13 @@
+vtkFiltersSMP
+vtkSMPContourGrid
+vtkSMPMergePoints
+vtkSMPMergePolyDataHelper
+vtkFiltersSMPModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonDataModel
+vtkmodules.vtkCommonExecutionModel
+vtkmodules.vtkCommonMisc
+vtkmodules.vtkCommonTransforms
+vtkmodules.vtkFiltersCore
+vtkmodules.vtkFiltersGeneral

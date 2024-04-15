@@ -1,0 +1,8 @@
+vtkIOPLY
+vtkPLY
+vtkPLYReader
+vtkPLYWriter
+vtkIOPLYModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkIOCore

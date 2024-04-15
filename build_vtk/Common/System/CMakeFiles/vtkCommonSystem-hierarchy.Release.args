@@ -1,0 +1,12 @@
+
+
+
+-I'/home/robsoc3/vtk-2/build/Common/System'
+-I'/home/robsoc3/vtk-2/source/Common/System'
+-I'/home/robsoc3/vtk-2/build/Common/Core'
+-I'/home/robsoc3/vtk-2/source/Common/Core'
+-I'/home/robsoc3/vtk-2/build/Utilities/KWIML'
+-I'/home/robsoc3/vtk-2/source/Utilities/KWIML'
+-I'/home/robsoc3/vtk-2/build/Utilities/KWSys'
+-I'/home/robsoc3/vtk-2/build/Utilities/KWSys'
+-I'/home/robsoc3/vtk-2/source/Utilities/KWSys'

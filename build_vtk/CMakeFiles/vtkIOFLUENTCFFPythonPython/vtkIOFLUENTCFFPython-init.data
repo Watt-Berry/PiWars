@@ -1,0 +1,6 @@
+vtkIOFLUENTCFF
+vtkFLUENTCFFReader
+vtkIOFLUENTCFFModule
+DEPENDS
+vtkmodules.vtkCommonCore
+vtkmodules.vtkCommonExecutionModel

@@ -1,0 +1,5 @@
+vtkIOMotionFX
+vtkMotionFXCFGReader
+vtkIOMotionFXModule
+DEPENDS
+vtkmodules.vtkCommonExecutionModel

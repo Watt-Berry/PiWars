@@ -1,0 +1,10 @@
+/home/robsoc3/vtk-2/source/IO/Chemistry/vtkCMLMoleculeReader.h;vtkIOChemistry
+/home/robsoc3/vtk-2/source/IO/Chemistry/vtkGaussianCubeReader.h;vtkIOChemistry
+/home/robsoc3/vtk-2/source/IO/Chemistry/vtkGaussianCubeReader2.h;vtkIOChemistry
+/home/robsoc3/vtk-2/source/IO/Chemistry/vtkMoleculeReaderBase.h;vtkIOChemistry
+/home/robsoc3/vtk-2/source/IO/Chemistry/vtkPDBReader.h;vtkIOChemistry
+/home/robsoc3/vtk-2/source/IO/Chemistry/vtkVASPAnimationReader.h;vtkIOChemistry
+/home/robsoc3/vtk-2/source/IO/Chemistry/vtkVASPTessellationReader.h;vtkIOChemistry
+/home/robsoc3/vtk-2/source/IO/Chemistry/vtkXYZMolReader.h;vtkIOChemistry
+/home/robsoc3/vtk-2/source/IO/Chemistry/vtkXYZMolReader2.h;vtkIOChemistry
+/home/robsoc3/vtk-2/build/IO/Chemistry/vtkIOChemistryModule.h;vtkIOChemistry

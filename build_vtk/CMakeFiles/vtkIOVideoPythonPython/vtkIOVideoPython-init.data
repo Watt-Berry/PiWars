@@ -1,0 +1,6 @@
+vtkIOVideo
+vtkIOVideoConfigure
+vtkVideoSource
+vtkIOVideoModule
+DEPENDS
+vtkmodules.vtkCommonExecutionModel

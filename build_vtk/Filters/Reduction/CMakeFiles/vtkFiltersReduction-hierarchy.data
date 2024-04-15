@@ -1,0 +1,7 @@
+/home/robsoc3/vtk-2/source/Filters/Reduction/vtkToAffineArrayStrategy.h;vtkFiltersReduction
+/home/robsoc3/vtk-2/source/Filters/Reduction/vtkToConstantArrayStrategy.h;vtkFiltersReduction
+/home/robsoc3/vtk-2/source/Filters/Reduction/vtkToImplicitArrayFilter.h;vtkFiltersReduction
+/home/robsoc3/vtk-2/source/Filters/Reduction/vtkToImplicitRamerDouglasPeuckerStrategy.h;vtkFiltersReduction
+/home/robsoc3/vtk-2/source/Filters/Reduction/vtkToImplicitStrategy.h;vtkFiltersReduction
+/home/robsoc3/vtk-2/source/Filters/Reduction/vtkToImplicitTypeErasureStrategy.h;vtkFiltersReduction
+/home/robsoc3/vtk-2/build/Filters/Reduction/vtkFiltersReductionModule.h;vtkFiltersReduction

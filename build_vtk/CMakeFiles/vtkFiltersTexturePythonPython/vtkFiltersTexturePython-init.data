@@ -1,0 +1,12 @@
+vtkFiltersTexture
+vtkImplicitTextureCoords
+vtkScalarsToTextureFilter
+vtkTextureMapToCylinder
+vtkTextureMapToPlane
+vtkTextureMapToSphere
+vtkThresholdTextureCoords
+vtkTransformTextureCoords
+vtkTriangularTCoords
+vtkFiltersTextureModule
+DEPENDS
+vtkmodules.vtkCommonExecutionModel

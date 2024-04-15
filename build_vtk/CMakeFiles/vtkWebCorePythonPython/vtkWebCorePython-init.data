@@ -1,0 +1,9 @@
+vtkWebCore
+vtkDataEncoder
+vtkObjectIdMap
+vtkWebApplication
+vtkWebInteractionEvent
+vtkWebUtilities
+vtkWebCoreModule
+DEPENDS
+vtkmodules.vtkCommonCore

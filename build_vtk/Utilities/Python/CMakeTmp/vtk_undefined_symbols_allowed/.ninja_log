@@ -1,0 +1,4 @@
+# ninja log v5
+1	69	1712769690736939336	CMakeFiles/undefined.dir/uses_undefined.c.o	7d426d147964a311
+2	70	1712769690736939336	CMakeFiles/undefined_exe.dir/main.c.o	e8e46daf722ef1a9
+70	123	1712769690788938786	libundefined.so	d5de24be0063e012
