@@ -1,72 +1,94 @@
+#!/usr/bin/env python
+import freenect
+import cv2
+import numpy as np
+from class_motor import MotorController
 from colour_detector import ColourDetector
 from blob_detector import BlobDetector
-import cv2
-from freenect import sync_get_depth as get_depth, sync_get_video as get_video, stop_sync
 
-class KinectVideo:
+# WILL NOT USE IF EITHER: NOT USING KINECT ANYMORE, OR USING IR SENSORS
 
-    @property
-    def frame(self):
-        (rgb, _) = get_video()
-        return cv2.imread(rgb)
+def display_depth(dev, data, timestamp):
+    pass
 
-    @property
-    def depth_frame(self):
-        (depth, _) = get_depth()
-        return cv2.imread(depth)
 
-    def end(self):
-        stop_sync()
+def get_next_direction(row_img) -> list[int]:
+    height, width, _ = row.shape
+    partX = width // 3
+    sectioned_row = [
+        row_img[0: height, 0: partX],
+        row_img[0: height, partX: partX * 2],
+        row_img[0: height, partX * 2: width]
+    ]
+    
+    largest = [-1, -1]
+    for i, part in enumerate(sectioned_row):
+        num_white = cv2.countNonZero(part)
+        if num_white > largest[1]:
+            largest = [i, num_white]
+    
+    return largest
+    
+
+
+
+def display_rgb(dev, data, timestamp):
+    # data = THE FRAME = is RGB
+    # convert frame to bgr
+    data = cv2.cvtColor(data, cv2.COLOR_RGB2BGR)
+    # get the ahead grayscale image
+    colour_detec.process_image(data)
+    grey = colour_detec.grayscale_channel
+    
+    # split the image into a 3x3 grid
+    height, width = grey.shape
+    partX = width // 3
+    partY = height // 3
+    # inspect bottom row to see if need to take drastic turns or not
+    bottom_row = grey[partY * 2: height]
+    bottom_row = [bottom_row[0:height, 0: partX], bottom_row[0: height, partX: partX * 2], bottom_row[0: height, partX * 2: width]]
+    # count the number of white pixels in each area and see if left or right > middle
+    for img in bottom_row:
+        cv2.imshow("part", img)
+    
+    largest = [-1, -1, None]
+    for i, part in enumerate(bottom_row):
+        num_white = cv2.countNonZero(part)
+        if num_white > largest[1]:
+            largest = [i, num_white, part]
+    #cv2.imshow("largest", largest[2])
+    if largest[0] == 0:
+        # turn left immediately
+        motor_control.turn_left(20)
+        return
+    elif largest[0] == 2:
+        motor_control.turn_right(20)
+        return
+    
+    # determine how fast forward to move based on when the straight line ends
+    # determine the length by checking each row and the length will be up to
+    # whenever the middle isnt the max -1
+    
+
+def body(*args):
+    if not keep_running:
+        raise freenect.Kill
+
+def init_runloop():
+    print('Press ESC in window to stop')
+    freenect.runloop(depth=display_depth,
+                     video=display_rgb,
+                     body=body)
 
 
 if __name__ == "__main__":
-    video = KinectVideo()
-    col = ColourDetector()
-    blo = BlobDetector()
+    keep_running = True
     
-    while True:
-        # get frame
-        frame = video.frame
-        # convert frame to grayscale
-        col.process_image(frame)
-        grayscale_frame = col.grayscale_channel
-        
-        # split the frame into 3 sections acros the horizon
-        # e.g. with a 1200 width -> 0-400, 400-800, 800-1200 sections
-        # count the black area in each section and output
-        # the area should increase with more of the line to follow -> could help line following
-        size_of_areas = [0, 0, 0]
-        
-        dimensions = grayscale_frame.shape
-        starty = 0
-        endy = dimensions[0]
-        section_width = dimensions[1] // 3
-        for i in range(3):
-            # get startx and endx
-            #starty and endy will be the same
-            startx = i * section_width
-            endx = (i + 1) * section_width
-            
-            section_img = grayscale_frame[starty:endy, startx: endx]
-            # reverse the grayscale image to have the white be black and black be white
-            blo.process_image(cv2.bitwise_not(section_img))
-            # use blob detector to find blobs and loop through all to get total area of seciotn
-            total_area = 0
-            for blob in blo.blobs:
-                diameter = blob.size
-                blob_area = 3.14 * (diameter / 2)**2
-                total_area += blob_area
-                
-            size_of_areas[i] = total_area
-        
-        # return the largest area of the sections
-        largest_area = max(size_of_areas)
-        if largest_area == size_of_areas[0]:
-            print("shoul tur left")
-        elif largest_area == size_of_areas[1]:
-            print("continue forward")
-        elif largest_area == size_of_areas[2]:
-            print("should turn right")
-        else:
-            print("how did this run")
+    colour_detec = ColourDetector()
+    blob_detec = BlobDetector()
+    motor_control = MotorController()
+    
+    init_runloop()
+
+    print("after")
 

@@ -105,7 +105,11 @@ class MotorController():
         self.ar.off()
         self.ab.off()
         self.motorAll.stop()
-        
+
+
+# CAN USE THIS CLASS FOR THE SHOOTING GAME TO REMOTE CONTROL,
+# TODO: add in key presses to shoot?
+
 from pynput.keyboard import Key, Listener
 
 def on_press(key):

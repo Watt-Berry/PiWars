@@ -29,16 +29,30 @@ class ArduinoReader():
 
 # needs to be started/ stopped until it works -> FIX THIS
 
+def setup_reader() -> ArduinoReader:
+    reader = ArduinoReader()
+    return reader
+
 if __name__ == "__main__":
-    try:
-        reader = ArduinoReader()
-        while True:
-            colour = reader.read_colour()
-            print(colour)
-            if colour:
-                print(reader.is_red(colour))
-    except KeyboardInterrupt:
-        pass
+    while True:
+        history = []
+        reader = setup_reader()
+        try:
+            while True:
+                colour = reader.read_colour()
+                history.append(colour)
+                print(colour)
+                if colour:
+                    print(reader.is_red(colour))
+                if len(history) > 50 and history[0] == history[-1]:
+                    raise Exception
+        except KeyboardInterrupt:
+            break
+        except Exception as e:
+            print(e)
+            reader.ser.close()
+            time.sleep(2)
+            continue
     reader.ser.close()
     reader.ser.reset_input_buffer()
     reader.ser.reset_output_buffer()
