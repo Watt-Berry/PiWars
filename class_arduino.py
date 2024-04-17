@@ -3,9 +3,9 @@ import RPi.GPIO as GPIO
 import PiMotor
 import time
 
-class ArduinoReader():
-    def __init__(self):
-        self.ser = serial.Serial("/dev/ttyUSB0", baudrate=9600, timeout=5)
+class ColourSensor():
+    def __init__(self, port):
+        self.ser = serial.Serial(port, baudrate=9600, timeout=5)
         self.ser.reset_input_buffer()
         self.ser.reset_output_buffer()
         
@@ -29,8 +29,8 @@ class ArduinoReader():
 
 # needs to be started/ stopped until it works -> FIX THIS
 
-def setup_reader() -> ArduinoReader:
-    reader = ArduinoReader()
+def setup_reader() -> ColourSensor:
+    reader = ColourSensor("/dev/ttyUSB0")
     return reader
 
 if __name__ == "__main__":

@@ -7,28 +7,54 @@ ir sensors (preferably 3)
 camera -> to check if finished course
 """
 
-from class_motor import MotorController()
-from class_arduino import ArduinoReader()
-# import camera
 
-def at_finish(frame) -> bool:
-    # check if theres no more white path in front and only behind, if true then return true else false
-    pass
+from class_motor import MotorController
+#from class_arduino import ColourSensor
+import PiMotor
+import RPi.GPIO as GPIO
 
-def determine_movement(vals: list[int]) -> None:
-    # choose a movement to do based on the ir sensor values and then move using motor controller
-    pass
+
 
 if __name__ == "__main__":
     motor_control = MotorController()
-    arduino_read = ArduinoReader()
-    
+    #arduino_read = ArduinoReader()
+    ir1 = PiMotor.Sensor("IR1", 1000) #left
+    ir2 = PiMotor.Sensor("IR2", 1000) #middle
+    ir3 = 11 #right
+    GPIO.setwarnings(False)
+    GPIO.setup(ir3, GPIO.IN)
+
+    speed = 50
+	
     # change to checking if no path left in front using camera
     while True:
         # get data from ir sensors
-        # navigate based on that
-    
-    # last push to the end zone then stop
-    motor_control.move_forward(20)
+        ir1.iRCheck()
+        ir2.iRCheck()
+
+        left_val = ir1.Triggered
+        mid_val = ir2.Triggered
+        right_val = GPIO.input(ir3)
+
+        # Triggered True means sees black, False means sees white
+        if not left_val and not mid_val and not right_val: #WWW
+            motor_control.stop()
+            break
+        elif not left_val and not mid_val and right_val: #WWB
+            motor_control.turn_right(speed)
+        elif not left_val and mid_val and not right_val: #WBW
+            motor_control.move_forward(speed)
+        elif not left_val and mid_val and right_val: #WBB
+            motor_control.right_forward(speed / 2)
+        elif left_val and not mid_val and not right_val: #BWW
+            motor_control.turn_left(speed)
+        elif left_val and not mid_val and right_val: #BWB
+            motor_control.move_backward(speed / 5)
+        elif left_val and mid_val and not right_val: #BBW
+            motor_control.left_forward(speed / 2)
+        elif left_val and mid_val and right_val: #BBB
+            motor_control.turn_right(100)
+
+    motor_control.move_forward(25)
     motor_control.stop()
         
