@@ -6,7 +6,6 @@ import vtk
 import pyvista as pv # try installing this, need vtk library
 from pyvista import examples
 from rplidar import RPLidar, RPLidarException
-import matplotlib.pyplot as plt
 
 """
 can get lidar stopping and starting by doing this:
@@ -90,36 +89,24 @@ def setup_lidar() -> RPLidar:
         print(property, ":", value)
     # for finding the library methods available
     print(dir(lidar))
+    
+def rotate_point_wrt_center(point_to_be_rotated, angle, center_point = (0,0)):
+    xnew = math.cos(angle)*(point_to_be_rotated[0] - center_point[0]) - math.sin(angle)*(point_to_be_rotated[1] - center_point[1]) + center_point[0]
+    ynew = math.sin(angle)*(point_to_be_rotated[0] - center_point[0]) + math.cos(angle)*(point_to_be_rotated[1] - center_point[1]) + center_point[1]
+    
+    return (xnew, ynew)
 
 def get_coordinates(angle: float, distance: float):
     #c = {'angle': 90, 'dist': distance}
     #a = {'angle': angle, 'dist': math.sin(angle) * distance}
     #b = {'angle': 90 - angle, 'dist': math.sin(90 - angle) * distance}
-#    return np.array([distance * math.cos(angle), -distance * math.sin(angle), 1]) 
-    
-    return np.array([math.sin(90 - angle) * distance, math.sin(angle) * distance, 1])
-
+    coord = [-(math.sin(1.57 - angle) * distance), math.sin(angle) * distance, 0]
+    x, y = rotate_point_wrt_center(coord, 3)
+    return [x, y, 0]
 
 if __name__ == "__main__":
-    data = np.zeros(shape=(1000,3), dtype=np.float32)
+    data = []
     plot = pv.Plotter()
-        
-#    plt.ion()
-#    fig, ax = plt.subplots()
-#    x, y = [],[]
-#    ax = plt.subplot(111, projection='polar')
-
-#    sc = ax.scatter(x,y)
-#    plt.xlim(-250,250)
-#    plt.ylim(-250,250)
-    
-#    plt.draw()
-
-    pointer = 0
-    
-
-#    line = ax.scatter([0, 0], [0, 0], s=5, c=[0, 50],
- #                          cmap=plt.cm.Greys_r, lw=0)
 
     while True:
         try:
@@ -127,60 +114,39 @@ if __name__ == "__main__":
         except RPLidarException:
             continue
         try:
-            iterator = lidar.iter_measures(max_buf_meas=5000).__iter__()
-            while True:
-                try:
-                    scan = iterator.__next__()
-#            for scan in lidar.iter_measures(max_buf_meas=5000):
-                    new_scan, quality, angle, distance = scan
-                    
-                    if distance == 0:
-                        continue
-
-                    #print(scan)
-
-                    angle = math.radians(angle)
-                    coordinates = get_coordinates(angle,distance)
-                    
-                    #x.append(coordinates[0])
-                    #y.append(coordinates[1])
-    
-                    data[pointer] = coordinates
-                    pointer += 1
-                    #sc.set_offsets(np.c_[x,y])
-                    #fig.canvas.draw_idle()
-                    #plt.pause(0.1)
-                    #ax.scatter(coordinates[0], coordinates[1], 0x0)
-                    #plt.draw()
-                    
-                    
-                    if new_scan:
-                        plot.clear()
-                        plot.add_points(
-                            data,
-                            render_points_as_spheres=True,
-                            point_size=5.0,
-                            color='pink',
-                        )
-                    #data = []
-                        #lidar.clean_input()
-                        plot.show(interactive_update=True, cpos="xy")
-                        plot.update(100)
-                    if pointer >= 999:
-                        data = np.zeros(shape=(1000,3), dtype=np.float32)
-                        pointer = 0
-                except Exception as e:
-                    print(e)
+            for scan in lidar.iter_measures(max_buf_meas=5000):
+                #print(scan)
+                new_scan, quality, angle, distance = scan
+                
+                if distance == 0.0:
                     continue
+                
+                angle = math.radians(angle)
+                data.append(get_coordinates(angle, distance))
+                
+                if new_scan:
+                    plot.clear()
+                    plot.add_points(
+                        np.array(data),
+                        render_points_as_spheres=True,
+                        point_size=10.0,
+                        color='pink',
+                    )
+                    data = []
+                    plot.show(interactive_update=True)
+                    plot.update(100)
+
         except KeyboardInterrupt:
-            #print("data is:")
-            #print(data)
+            print("size data:")
+            print(len(data))
             break
         except Exception as e:
             print(e)
+            lidar.clean_input()
             lidar.disconnect()
             continue
     lidar.stop()
     lidar.stop_motor()
     lidar.disconnect()
     print("end")
+

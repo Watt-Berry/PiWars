@@ -23,36 +23,35 @@ class ColourSensor():
         return [int(x) for x in data]
     
     def is_red(self, colour):
-        if colour[0] - min(colour) >= 45:
+        if colour[0] - min(colour) >= 30:
+            print("IS RED")
             return True
         return False
+    
+    def is_green(self, colour):
+        if colour[1] - min(colour) >= 30:
+            print("IS GREEN")
+            return True
+        return False
+    
+    def is_black(self, colour):
+        # return true if all are below a certain threshold
+        return sum(colour) >= 300
 
 # needs to be started/ stopped until it works -> FIX THIS
 
-def setup_reader() -> ColourSensor:
-    reader = ColourSensor("/dev/ttyUSB0")
-    return reader
-
 if __name__ == "__main__":
+    reader = ColourSensor("/dev/ttyUSB0")
     while True:
-        history = []
-        reader = setup_reader()
         try:
-            while True:
-                colour = reader.read_colour()
-                history.append(colour)
-                print(colour)
-                if colour:
-                    print(reader.is_red(colour))
-                if len(history) > 50 and history[0] == history[-1]:
-                    raise Exception
+            colour = reader.read_colour()
+            print(colour)
+            if colour:
+                #print(reader.is_red(colour))
+                #print(reader.is_green(colour))
+                print(reader.is_black(colour))
         except KeyboardInterrupt:
             break
-        except Exception as e:
-            print(e)
-            reader.ser.close()
-            time.sleep(2)
-            continue
     reader.ser.close()
     reader.ser.reset_input_buffer()
     reader.ser.reset_output_buffer()

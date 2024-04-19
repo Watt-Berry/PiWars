@@ -52,6 +52,27 @@ def find_red_barrels(img) -> list[list[int]]:
 
     return barrels_points
 
+def find_green_barrels(img) -> list[list[int]]:
+    global colour_detec, blob_detec
+    colour_detec.process_image(img)
+    blob_detec.process_image(colour_detec.green_mask)
+    # loop through the blobs and filter out any too large or too small
+    minSize, maxSize = 1000, 10_000 #TODO: change these to be more accurate
+
+    points = blob_detec.blobs_info
+    barrels_points = []
+    for c in points:
+        size = len(c)
+        if minSize < size > maxSize:
+            continue
+        # find midpoints of barrels on img
+        M = cv2.moments(c)
+        cX = int(M["m10"] / M["m00"])
+        cY = int(M["m01"] / M["m00"])
+        barrels_points.append([cX, cY])
+
+    return barrels_points
+
 def find_closest_point(frame, points) -> list[list[int], int]:
     height, width, _ = frame.shape
     center = [width // 2, height]
@@ -129,14 +150,19 @@ if __name__ == "__main__":
             TODO: using lidar get map of arena and where currently
             navigate to one wall and move along the walls of the arena until
             colour sensor detects that the robot is above red
-            """
-            
+            """   
 
-        points = find_red_barrels()
-        if len(points) < 1:
-            # if nothing found then turn right and continue
+        # keep turning to and finding barrels, if found then continue to next code
+        # otherwise break if done too many turns as no more barrels are therefore left
+        points = []
+        num_turns = 0
+        while len(points) == 0 and num_turns < 4:
+            points = find_red_barrels(frame)
             motor_control.turn_right(50)
-            continue
+            num_turns += 1
+        
+        if len(points) == 0:
+            break
 
         # otherwise find the closest barrel and navigate to it
         # closest = closest to the middle of the bottom of the screen = closest to [width // 2, height]
@@ -152,4 +178,42 @@ if __name__ == "__main__":
 
     # then find and sort all green barrels
     while hunting_green:
-        pass
+        # get red blobs/barrels in frame
+        result, frame = video_stream.read()
+        if not result:
+            # if nothing found then try again
+            continue
+
+        # check if holding barrel currently
+        if ultrasonic.get_distance() < 10.0:
+            # find end zone and navigate to it
+            """
+            TODO: using lidar get map of arena and where currently
+            navigate to one wall and move along the walls of the arena until
+            colour sensor detects that the robot is above red
+            """
+        
+        # keep turning to and finding barrels, if found then continue to next code
+        # otherwise break if done too many turns as no more barrels are therefore left
+        points = []
+        num_turns = 0
+        while len(points) == 0 and num_turns < 4:
+            points = find_green_barrels(frame)
+            motor_control.turn_right(50)
+            num_turns += 1
+        
+        if len(points) == 0:
+            break
+
+        # otherwise find the closest barrel and navigate to it
+        # closest = closest to the middle of the bottom of the screen = closest to [width // 2, height]
+        closest = find_closest_point(frame, points)
+        if closest[0] == -1:
+            continue
+
+        # navigate to the closest based on the coordinates of the image
+        navigate_based_on_point(frame, closest[0])
+        
+    # at the end stop
+    motor_control.stop()
+    

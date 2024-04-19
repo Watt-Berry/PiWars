@@ -10,7 +10,8 @@ import RPi.GPIO as GPIO
 class MotorController():
     def __init__(self):
         GPIO.cleanup()
-        #Name of Individual MOTORS 
+        #Name of Individual MOTORS
+        # CHANGE NAMES BASED ON HOW ITS WIRED
         self.m1 = PiMotor.Motor("MOTOR1",1) # top right
         self.m2 = PiMotor.Motor("MOTOR2",1) # bottom right
         self.m3 = PiMotor.Motor("MOTOR3",1) # top left
