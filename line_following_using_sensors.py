@@ -16,6 +16,8 @@ import time
 from inputs import get_gamepad
 
 
+# TODO: check if can place 3rd ir sensor on ultrasonic pins and have it working, HOPEFULLY IT DOES
+
 
 if __name__ == "__main__":
     motor_control = MotorController()

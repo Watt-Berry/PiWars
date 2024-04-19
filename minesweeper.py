@@ -56,7 +56,7 @@ def determine_movement_based_on_frame(img) -> None:
 if __name__ == "__main__":
     #init needed components
     motor_control = MotorController()
-    colour_sensor = ColourSensor()
+    colour_sensor = ColourSensor("/dev/ttyUSB0")
     video_capture = cv2.VideoCapture(0)
     colour_detec = ColourDetector()
     blob_detec = BlobDetector()

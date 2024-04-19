@@ -5,9 +5,26 @@ import time
 
 class ColourSensor():
     def __init__(self, port):
-        self.ser = serial.Serial(port, baudrate=9600, timeout=5)
+        self.ser = serial.Serial(port, baudrate=9600, timeout=3)
         self.ser.reset_input_buffer()
         self.ser.reset_output_buffer()
+
+        # keep initiating and resetting colour sensor until its working
+        total = [0, 0, 0]
+        while True:
+            for i in range(15):
+                new_col = self.read_colour()
+                total[0] += new_col[0]
+                total[1] += new_col[1]
+                total[2] += new_col[2]
+            total[0] /= 15
+            total[1] /= 15
+            total[2] /= 15
+            # check if the sum and last value are the same -> if true then values are not changing and there is an issue so reset
+            if total == new_col:
+                self.__init__(port)
+            else:
+                break
         
     def read_colour(self):
         # decode the read line into the values that the ir has interpreted
@@ -37,6 +54,12 @@ class ColourSensor():
     def is_black(self, colour):
         # return true if all are below a certain threshold
         return sum(colour) >= 300
+    
+    def is_blue(self, colour):
+        return colour[2] - min(colour) >= 30
+
+    def is_yellow(self, colour):
+        return abs(colour[0] - colour[1]) < 20
 
 # needs to be started/ stopped until it works -> FIX THIS
 

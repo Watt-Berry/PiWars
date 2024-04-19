@@ -19,16 +19,20 @@ order of program:
 7. repeat until all red barrels are within the end zone ( use colour + blob detectors )
 
 8. now do the same for green barrels and end zone
+
+
+note: deliver green to blue end zone, red to yellow end zone
 """
 
-#from class_lidar import LidarDetector
+from class_lidar2 import LidarDetector
 from class_motor import MotorController
 from colour_detector import ColourDetector
 from blob_detector import BlobDetector
-from class_ultrasonic import UltrasonicSensor
+#from class_ultrasonic import UltrasonicSensor
 from class_arduino import ColourSensor
 import cv2
 import math
+
 
 # return either empty list or list of barrel points on image
 def find_red_barrels(img) -> list[list[int]]:
@@ -89,7 +93,7 @@ def find_closest_point(frame, points) -> list[list[int], int]:
 
 
 def navigate_based_on_point(frame, point: list[int]) -> None:
-    global motor_control
+    global motors
 
     height, width, _ = frame.shape
     width_part = width / 5
@@ -99,36 +103,36 @@ def navigate_based_on_point(frame, point: list[int]) -> None:
         # left
         if point[1] < height_part:
             # top left
-            motor_control.left_forward(30)
+            motors.left_forward(30)
         else:
             # bottom left
-            motor_control.turn_left(60)
+            motors.turn_left(60)
     elif point[0] > width - (width_part * 2):
         # right
         if point[1] < height_part:
             # top right
-            motor_control.right_forward(30)
+            motors.right_forward(30)
         else:
             # bottom right
-            motor_control.turn_right(60)
+            motors.turn_right(60)
     else:
         # center
         if point[1] < height_part // 2:
             # at the end
-            motor_control.move_forward(100)
+            motors.move_forward(100)
         elif point[1] < height_part:
             # in middle
-            motor_control.move_forward(50)
+            motors.move_forward(50)
         else:
             # at start/ very close
-            motor_control.move_forward(25)
+            motors.move_forward(25)
 
 
 
 if __name__ == "__main__":
-    video_stream = cv2.VideoCapture(0)
-    motor_control = MotorController()
-    ultrasonic = UltrasonicSensor()
+    video = cv2.VideoCapture(0)
+    motors = MotorController()
+    lidar = LidarDetector("/dev/ttyUSB1")
     colour_sensor = ColourSensor("/dev/ttyUSB0")
     colour_detec = ColourDetector()
     blob_detec = BlobDetector()
@@ -138,19 +142,48 @@ if __name__ == "__main__":
     # first find and sort all red barrels
     while hunting_red:
         # get red blobs/barrels in frame
-        result, frame = video_stream.read()
+        result, frame = video.read()
         if not result:
             # if nothing found then try again
             continue
 
         # check if holding barrel currently
-        if ultrasonic.get_distance() < 10.0:
-            # find end zone and navigate to it
-            """
-            TODO: using lidar get map of arena and where currently
-            navigate to one wall and move along the walls of the arena until
-            colour sensor detects that the robot is above red
-            """   
+        # use lidar to get distance in front and check if holding barrel
+        if lidar.get_scan()[0] < 150:
+            # find YELLOW end zone and navigate to it until above yellow zone
+            # check if above yellow
+            if colour_sensor.is_yellow(colour_sensor.read_colour()):
+                # then back out and turn fully around
+                motors.move_backward(50)
+                motors.turn_right(100)
+            else:
+                # find end zone
+                # TODO: use lidar data to get distance to a point from image and determine speed based on distance
+                # pass frame to colour sensor and get yellow mask
+                colour_detec.process_image(frame)
+                blob_detec.process_image(colour_detec.yellow_mask)
+                points = blob_detec.blobs_info
+                if len(points) == 0:
+                    motors.turn_right(50)
+                else:
+                    # determine movement to take based on where blob is in image
+                    # find midpoint of blobs
+                    for c in points:
+                        M = cv2.moments(c)
+                        cX = int(M["m10"] / M["m00"])
+                        cY = int(M["m01"] / M["m00"])
+                    midpoint = [cX, cY]
+                    height, width, _ = blob_detec.blobs_img.shape
+                    if midpoint[0] < width // 2.5:
+                        motors.turn_left(25)
+                    elif midpoint[0] > width - (width // 2.5):
+                        motors.turn_right(25)
+                    else:
+                        if midpoint[1] < height // 2.5:
+                            motors.move_forward(50)
+                        else:
+                            motors.move_forward(25)
+                continue
 
         # keep turning to and finding barrels, if found then continue to next code
         # otherwise break if done too many turns as no more barrels are therefore left
@@ -158,7 +191,7 @@ if __name__ == "__main__":
         num_turns = 0
         while len(points) == 0 and num_turns < 4:
             points = find_red_barrels(frame)
-            motor_control.turn_right(50)
+            motors.turn_right(50)
             num_turns += 1
         
         if len(points) == 0:
@@ -179,19 +212,48 @@ if __name__ == "__main__":
     # then find and sort all green barrels
     while hunting_green:
         # get red blobs/barrels in frame
-        result, frame = video_stream.read()
+        result, frame = video.read()
         if not result:
             # if nothing found then try again
             continue
 
         # check if holding barrel currently
-        if ultrasonic.get_distance() < 10.0:
-            # find end zone and navigate to it
-            """
-            TODO: using lidar get map of arena and where currently
-            navigate to one wall and move along the walls of the arena until
-            colour sensor detects that the robot is above red
-            """
+        # use lidar to get distance in front and check if holding barrel
+        if lidar.get_scan()[0] < 150:
+            # find YELLOW end zone and navigate to it until above yellow zone
+            # check if above yellow
+            if colour_sensor.is_blue(colour_sensor.read_colour()):
+                # then back out and turn fully around
+                motors.move_backward(50)
+                motors.turn_right(100)
+            else:
+                # find end zone
+                # pass frame to colour sensor and get yellow mask
+                colour_detec.process_image(frame)
+                blob_detec.process_image(colour_detec.yellow_mask)
+                points = blob_detec.blobs_info
+                if len(points) == 0:
+                    motors.turn_right(50)
+                else:
+                    # determine movement to take based on where blob is in image
+                    # TODO: use lidar data to get distance to a point from image and determine speed based on distance
+                    # find midpoint of blobs
+                    for c in points:
+                        M = cv2.moments(c)
+                        cX = int(M["m10"] / M["m00"])
+                        cY = int(M["m01"] / M["m00"])
+                    midpoint = [cX, cY]
+                    height, width, _ = blob_detec.blobs_img.shape
+                    if midpoint[0] < width // 2.5:
+                        motors.turn_left(25)
+                    elif midpoint[0] > width - (width // 2.5):
+                        motors.turn_right(25)
+                    else:
+                        if midpoint[1] < height // 2.5:
+                            motors.move_forward(50)
+                        else:
+                            motors.move_forward(25)
+                continue
         
         # keep turning to and finding barrels, if found then continue to next code
         # otherwise break if done too many turns as no more barrels are therefore left
@@ -199,7 +261,7 @@ if __name__ == "__main__":
         num_turns = 0
         while len(points) == 0 and num_turns < 4:
             points = find_green_barrels(frame)
-            motor_control.turn_right(50)
+            motors.turn_right(50)
             num_turns += 1
         
         if len(points) == 0:
@@ -215,5 +277,5 @@ if __name__ == "__main__":
         navigate_based_on_point(frame, closest[0])
         
     # at the end stop
-    motor_control.stop()
+    motors.stop()
     

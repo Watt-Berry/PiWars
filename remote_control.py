@@ -2,6 +2,7 @@ from inputs import get_gamepad
 from class_motor import MotorController
 import RPi.GPIO as GPIO
 import math
+import cv2
 
 
 """
@@ -17,6 +18,7 @@ left joystick -> movement
 right joystick x axis -> rotating left/right
 L1 -> decrease speed
 L2 -> increase speed
+TODO: button presses + functionality to shoot
 """
 
 
@@ -63,7 +65,8 @@ def set_movement(code: str, val: int):
 
 
 if __name__ == "__main__":
-    motor_control = MotorController()
+    motors = MotorController()
+    video = cv2.VideoCapture(0)
 
     direction = {'x': 0, 'y': 0}
     rotation, is_rotating = 0, False
@@ -71,6 +74,13 @@ if __name__ == "__main__":
 
     while True:
         try:
+            # get and display frame
+            result, frame = video.read()
+            if result:
+                cv2.imshow("Robot View", frame)
+                cv2.waitKey(1)
+
+
             events = get_gamepad()
             for event in events:
                 if event.code == "SYN_REPORT":
@@ -84,42 +94,42 @@ if __name__ == "__main__":
                 print(rotation)
                 # handle rotations
                 if rotation == 0: 
-                    motor_control.stop()
+                    motors.stop()
                     is_rotating = False
                 elif rotation <= -1: 
-                    motor_control.turn_left(speed)
+                    motors.turn_left(speed)
                     is_rotating = True
                 elif rotation >= 1: 
-                    motor_control.turn_right(speed)
+                    motors.turn_right(speed)
                     is_rotating = True
 
                 if is_rotating:
                     continue
 
                 # handle movements
-                if direction['x'] == 0 and direction['y'] == 0: motor_control.stop()
+                if direction['x'] == 0 and direction['y'] == 0: motors.stop()
                 
                 elif direction['x'] == 0 and direction['y'] >= 1: 
-                    motor_control.move_forward(speed)
+                    motors.move_forward(speed)
                 elif direction['x'] == 0 and direction['y'] <= -1: 
-                    motor_control.move_backward(speed)
+                    motors.move_backward(speed)
                 elif direction['x'] >= 1 and direction['y'] == 0: 
-                    motor_control.strafe_right(speed)
+                    motors.strafe_right(speed)
                 elif direction['x'] <= -1 and direction['y'] == 0: 
-                    motor_control.strafe_left(speed)
+                    motors.strafe_left(speed)
                 
                 elif direction['x'] >= 1 and direction['y'] >= 1: 
-                    motor_control.right_forward(speed)
+                    motors.right_forward(speed)
                 elif direction['x'] >= 1 and direction['y'] <= -1: 
-                    motor_control.right_reverse(speed)
+                    motors.right_reverse(speed)
                 elif direction['x'] <= -1 and direction['y'] >= 1: 
-                    motor_control.left_forward(speed)
+                    motors.left_forward(speed)
                 elif direction['x'] <= -1 and direction['y'] <= -1: 
-                    motor_control.left_reverse(speed)
+                    motors.left_reverse(speed)
         except Exception as e:
             # break out forcefully when done and stop the motor
             print(e)
             break
 
-    motor_control.stop()
+    motors.stop()
     GPIO.cleanup()

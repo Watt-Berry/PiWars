@@ -3,9 +3,7 @@
 import PiMotor
 import time
 import RPi.GPIO as GPIO
-#from spinner_motor_control import Spinner
-#from class_ultrasonic import UltrasonicSensor
-#from class_arduino import ArduinoReader
+
 
 class MotorController():
     def __init__(self):
