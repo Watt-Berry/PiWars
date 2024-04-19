@@ -20,12 +20,11 @@ from inputs import get_gamepad
 if __name__ == "__main__":
     motor_control = MotorController()
     motor_control.stop()
-    #arduino_read = ArduinoReader()
     ir1 = PiMotor.Sensor("IR1", 5000) #left
     ir2 = ColourSensor("/dev/ttyUSB0") #middle
     ir3 = PiMotor.Sensor("IR2", 5000) #right
 
-    speed = 20
+    speed = 15
 
     # check if colour sensor is working
     # try:
@@ -37,20 +36,24 @@ if __name__ == "__main__":
     # ^
     # if working then ctrl C once
     # if not working then ctrl C twice / stop program
-        
 
     move = False
+    prev_state = 0
 
     try:
         # change to checking if no path left in front using camera
         while True:
             events = get_gamepad()
             for event in events:
-                if event.code == "SYN_REPORT":
-                    continue
-                if event.code == "BTN_SOUTH" and event.state == 1:
+                # if event.code == "BTN_NORTH":
+                #     ir2 = ColourSensor("/dev/ttyUSB0")
+                #     for i in range(10):
+                #         print(ir2.read_colour())
+                if event.code != "BTN_SOUTH": continue
+                if prev_state == 1 and event.state == 0:
                     move = not move
                     break
+                prev_state = event.state
                 
             if not move:
                 motor_control.stop()
@@ -81,21 +84,28 @@ if __name__ == "__main__":
             # elif left_val == mid_val == right_val == 1: #BBB
             #     motor_control.move_backward(speed)
 
-            if not left_val and not mid_val and not right_val:
+            if not left_val and not mid_val and not right_val: #WWW
                 motor_control.stop()
-                move = False
-            elif not left_val and not mid_val and right_val: #WWB
-                motor_control.turn_right(100)
-            elif not left_val and mid_val and not right_val: #WBW
+            elif left_val and right_val: #BWB
+                motor_control.move_backward(speed // 2)
+            elif left_val:
+                motor_control.turn_left(speed * 2)
+            elif right_val:
+                motor_control.turn_right(speed * 2)
+            elif mid_val:
                 motor_control.move_forward(speed)
-            elif not left_val and mid_val and right_val: #WBB
-                motor_control.turn_right(100)
-            elif left_val and not mid_val and not right_val: #BWW
-                motor_control.turn_left(100)
-            elif left_val and not mid_val and right_val: #BWB
-                motor_control.move_backward(speed)
-            elif left_val and mid_val and not right_val: #BBW
-                motor_control.turn_left(100)
+            # elif not left_val and not mid_val and right_val: #WWB
+            #     motor_control.turn_right(speed * 2)
+            # elif not left_val and mid_val and not right_val: #WBW
+            #     motor_control.move_forward(speed)
+            # elif not left_val and mid_val and right_val: #WBB
+            #     motor_control.turn_right(speed * 2)
+            # elif left_val and not mid_val and not right_val: #BWW
+            #     motor_control.turn_left(speed * 2)
+            # elif left_val and not mid_val and right_val: #BWB
+            #     motor_control.move_backward(speed)
+            # elif left_val and mid_val and not right_val: #BBW
+            #     motor_control.turn_left(speed * 2)
 
     except KeyboardInterrupt:
         pass
