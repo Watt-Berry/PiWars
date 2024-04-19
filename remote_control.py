@@ -17,7 +17,7 @@ CONTROLS:
 left joystick -> movement
 right joystick x axis -> rotating left/right
 L1 -> decrease speed
-L2 -> increase speed
+R1 -> increase speed
 TODO: button presses + functionality to shoot
 """
 

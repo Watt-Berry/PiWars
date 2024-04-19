@@ -127,6 +127,14 @@ def navigate_based_on_point(frame, point: list[int]) -> None:
             # at start/ very close
             motors.move_forward(25)
 
+def find_angle(point, center) -> float:
+    angle = math.asin(
+        (center[1] - point[1]) / 
+        math.sqrt((center[1] - point[1])**2 + (center[0] - point[0])**2)
+    )
+    return angle
+
+
 
 
 if __name__ == "__main__":
@@ -149,7 +157,9 @@ if __name__ == "__main__":
 
         # check if holding barrel currently
         # use lidar to get distance in front and check if holding barrel
-        if lidar.get_scan()[0] < 150:
+        scans = lidar.get_scan()
+
+        if scans[0] < 150:
             # find YELLOW end zone and navigate to it until above yellow zone
             # check if above yellow
             if colour_sensor.is_yellow(colour_sensor.read_colour()):
@@ -158,7 +168,6 @@ if __name__ == "__main__":
                 motors.turn_right(100)
             else:
                 # find end zone
-                # TODO: use lidar data to get distance to a point from image and determine speed based on distance
                 # pass frame to colour sensor and get yellow mask
                 colour_detec.process_image(frame)
                 blob_detec.process_image(colour_detec.yellow_mask)
@@ -174,15 +183,22 @@ if __name__ == "__main__":
                         cY = int(M["m01"] / M["m00"])
                     midpoint = [cX, cY]
                     height, width, _ = blob_detec.blobs_img.shape
+                    
+                    # get angle at which object is at
+                    angle = find_angle(midpoint, [width // 2, height])
+                    # find distance at angle using lidar
+                    dist = scans[angle]
+                    speed = dist / 4000 * 100
+
                     if midpoint[0] < width // 2.5:
-                        motors.turn_left(25)
+                        motors.turn_left(speed)
                     elif midpoint[0] > width - (width // 2.5):
-                        motors.turn_right(25)
+                        motors.turn_right(speed)
                     else:
                         if midpoint[1] < height // 2.5:
-                            motors.move_forward(50)
+                            motors.move_forward(min(speed * 2, 100))
                         else:
-                            motors.move_forward(25)
+                            motors.move_forward(speed)
                 continue
 
         # keep turning to and finding barrels, if found then continue to next code
@@ -236,7 +252,6 @@ if __name__ == "__main__":
                     motors.turn_right(50)
                 else:
                     # determine movement to take based on where blob is in image
-                    # TODO: use lidar data to get distance to a point from image and determine speed based on distance
                     # find midpoint of blobs
                     for c in points:
                         M = cv2.moments(c)
@@ -244,15 +259,22 @@ if __name__ == "__main__":
                         cY = int(M["m01"] / M["m00"])
                     midpoint = [cX, cY]
                     height, width, _ = blob_detec.blobs_img.shape
+
+                    # get angle at which object is at
+                    angle = find_angle(midpoint, [width // 2, height])
+                    # find distance at angle using lidar
+                    dist = scans[angle]
+                    speed = dist / 4000 * 100
+
                     if midpoint[0] < width // 2.5:
-                        motors.turn_left(25)
+                        motors.turn_left(speed)
                     elif midpoint[0] > width - (width // 2.5):
-                        motors.turn_right(25)
+                        motors.turn_right(speed)
                     else:
                         if midpoint[1] < height // 2.5:
-                            motors.move_forward(50)
+                            motors.move_forward(min(speed * 2, 100))
                         else:
-                            motors.move_forward(25)
+                            motors.move_forward(speed)
                 continue
         
         # keep turning to and finding barrels, if found then continue to next code

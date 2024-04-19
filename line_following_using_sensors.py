@@ -23,7 +23,19 @@ if __name__ == "__main__":
     motor_control = MotorController()
     motor_control.stop()
     ir1 = PiMotor.Sensor("IR1", 5000) #left
-    ir2 = ColourSensor("/dev/ttyUSB0") #middle
+    #ir2 = ColourSensor("/dev/ttyUSB0") #middle
+
+
+    ir2 = PiMotor.Sensor("ULTRASONIC", 5000) #FIRST SEE IF THIS WORKS
+
+    # IF NOT THEN TEST THIS
+    # ir2 = 31
+    # GPIO.setup(ir2, GPIO.IN)
+
+    # while True:
+    #     print(GPIO.input(ir2))
+
+
     ir3 = PiMotor.Sensor("IR2", 5000) #right
 
     speed = 15
@@ -43,8 +55,9 @@ if __name__ == "__main__":
     prev_state = 0
 
     try:
-        # change to checking if no path left in front using camera
         while True:
+
+            # for toggling the motors to start/stop using the x button on gamepad
             events = get_gamepad()
             for event in events:
                 # if event.code == "BTN_NORTH":
@@ -64,10 +77,11 @@ if __name__ == "__main__":
             
             # get data from ir sensors
             ir1.iRCheck()
+            #ir2.iRCheck()
             ir3.iRCheck()
             
-            mid_val = True#not ir2.is_black(ir2.read_colour())
             left_val = not ir1.Triggered
+            mid_val = not ir2.Triggered#True#not ir2.is_black(ir2.read_colour())
             right_val = not ir3.Triggered
 
             print(left_val, mid_val, right_val)
@@ -88,13 +102,13 @@ if __name__ == "__main__":
 
             if not left_val and not mid_val and not right_val: #WWW
                 motor_control.stop()
-            elif left_val and right_val: #BWB
+            elif left_val and right_val: #WBW
                 motor_control.move_backward(speed // 2)
-            elif left_val:
+            elif left_val: #WBB/ WWB
                 motor_control.turn_left(speed * 2)
-            elif right_val:
+            elif right_val: #BBW/ BWW
                 motor_control.turn_right(speed * 2)
-            elif mid_val:
+            elif mid_val: #BWB
                 motor_control.move_forward(speed)
             # elif not left_val and not mid_val and right_val: #WWB
             #     motor_control.turn_right(speed * 2)
@@ -111,7 +125,3 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         pass
-
-    motor_control.move_forward(25)
-    motor_control.stop()
-        

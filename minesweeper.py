@@ -7,12 +7,6 @@ for minesweeper need to use:
     blob detector
 """
 
-"""
-kinect video means it HAS TO BE event based
-other cameras could allow more freedom into custom loops
-"""
-
-
 
 import numpy as np
 import cv2

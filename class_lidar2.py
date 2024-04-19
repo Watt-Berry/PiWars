@@ -38,14 +38,16 @@ class LidarDetector:
         data = {}
         scanning = True
         while scanning:
-            self.lidar.reset() #reset so that it starts from 0
+            self.lidar.reset() #reset so that it starts from 0?
             try:
-                for scan in self.lidar.iter_measures(max_buf_meas=5000):
+                # set buffer to false for unlimited
+                for scan in self.lidar.iter_measures(max_buf_meas=False):
                     new_scan, quality, angle, distance = scan
                     angle = round(angle)
                     distance = round(distance)
                     data[angle] = distance
 
+                    # keep going until have at least 346 angles marked
                     if new_scan and len(data.keys()) > 345:
                         scanning = False
                         break
