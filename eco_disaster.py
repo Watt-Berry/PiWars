@@ -28,7 +28,6 @@ from class_lidar2 import LidarDetector
 from class_motor import MotorController
 from colour_detector import ColourDetector
 from blob_detector import BlobDetector
-#from class_ultrasonic import UltrasonicSensor
 from class_arduino import ColourSensor
 import cv2
 import math
@@ -40,7 +39,7 @@ def find_red_barrels(img) -> list[list[int]]:
     colour_detec.process_image(img)
     blob_detec.process_image(colour_detec.red_mask)
     # loop through the blobs and filter out any too large or too small
-    minSize, maxSize = 1000, 10_000 #TODO: change these to be more accurate
+    minSize, maxSize = 500, 2000 #TODO: change these to be more accurate
 
     points = blob_detec.blobs_info
     barrels_points = []
@@ -61,7 +60,7 @@ def find_green_barrels(img) -> list[list[int]]:
     colour_detec.process_image(img)
     blob_detec.process_image(colour_detec.green_mask)
     # loop through the blobs and filter out any too large or too small
-    minSize, maxSize = 1000, 10_000 #TODO: change these to be more accurate
+    minSize, maxSize = 500, 2000 #TODO: change these to be more accurate
 
     points = blob_detec.blobs_info
     barrels_points = []
@@ -93,7 +92,7 @@ def find_closest_point(frame, points) -> list[list[int], int]:
 
 
 def navigate_based_on_point(frame, point: list[int]) -> None:
-    global motors
+    global motors, speed
 
     height, width, _ = frame.shape
     width_part = width / 5
@@ -103,29 +102,21 @@ def navigate_based_on_point(frame, point: list[int]) -> None:
         # left
         if point[1] < height_part:
             # top left
-            motors.left_forward(30)
+            motors.left_forward(speed)
         else:
             # bottom left
-            motors.turn_left(60)
+            motors.turn_left(speed * 2)
     elif point[0] > width - (width_part * 2):
         # right
         if point[1] < height_part:
             # top right
-            motors.right_forward(30)
+            motors.right_forward(speed)
         else:
             # bottom right
-            motors.turn_right(60)
+            motors.turn_right(speed * 2)
     else:
         # center
-        if point[1] < height_part // 2:
-            # at the end
-            motors.move_forward(100)
-        elif point[1] < height_part:
-            # in middle
-            motors.move_forward(50)
-        else:
-            # at start/ very close
-            motors.move_forward(25)
+        motors.move_forward(speed)
 
 def find_angle(point, center) -> float:
     angle = math.asin(
@@ -135,15 +126,25 @@ def find_angle(point, center) -> float:
     return angle
 
 
+def is_holding_barrel(scans: dict) -> bool:
+    for angle in range(350, 361):
+        if scans[str(angle)] < 250:
+            return True
+    for angle in range(0, 11):
+        if scans[str(angle)] < 250:
+            return True
+    return False
 
 
 if __name__ == "__main__":
     video = cv2.VideoCapture(0)
     motors = MotorController()
-    lidar = LidarDetector("/dev/ttyUSB1")
-    colour_sensor = ColourSensor("/dev/ttyUSB0")
+    lidar = LidarDetector("/dev/ttyUSB0")
+    colour_sensor = ColourSensor("/dev/ttyUSB1")
     colour_detec = ColourDetector()
     blob_detec = BlobDetector()
+
+    speed = 20
 
     hunting_red = hunting_green = True
 
@@ -159,13 +160,13 @@ if __name__ == "__main__":
         # use lidar to get distance in front and check if holding barrel
         scans = lidar.get_scan()
 
-        if scans[0] < 150:
+        if is_holding_barrel(scans):
             # find YELLOW end zone and navigate to it until above yellow zone
             # check if above yellow
             if colour_sensor.is_yellow(colour_sensor.read_colour()):
                 # then back out and turn fully around
-                motors.move_backward(50)
-                motors.turn_right(100)
+                motors.move_backward(speed)
+                motors.turn_right(80)
             else:
                 # find end zone
                 # pass frame to colour sensor and get yellow mask
@@ -173,7 +174,7 @@ if __name__ == "__main__":
                 blob_detec.process_image(colour_detec.yellow_mask)
                 points = blob_detec.blobs_info
                 if len(points) == 0:
-                    motors.turn_right(50)
+                    motors.turn_right(speed * 2)
                 else:
                     # determine movement to take based on where blob is in image
                     # find midpoint of blobs
@@ -187,18 +188,16 @@ if __name__ == "__main__":
                     # get angle at which object is at
                     angle = find_angle(midpoint, [width // 2, height])
                     # find distance at angle using lidar
-                    dist = scans[angle]
-                    speed = dist / 4000 * 100
+                    
+                    dist = (scans[angle] + scans[angle - 1] + scans[angle + 1]) / 3
+                    speed = min(round(dist / 4000 * 80), 80)
 
                     if midpoint[0] < width // 2.5:
-                        motors.turn_left(speed)
+                        motors.turn_left(speed * 2)
                     elif midpoint[0] > width - (width // 2.5):
-                        motors.turn_right(speed)
+                        motors.turn_right(speed * 2)
                     else:
-                        if midpoint[1] < height // 2.5:
-                            motors.move_forward(min(speed * 2, 100))
-                        else:
-                            motors.move_forward(speed)
+                        motors.move_forward(speed * 2)
                 continue
 
         # keep turning to and finding barrels, if found then continue to next code
@@ -235,13 +234,15 @@ if __name__ == "__main__":
 
         # check if holding barrel currently
         # use lidar to get distance in front and check if holding barrel
-        if lidar.get_scan()[0] < 150:
+        scans = lidar.get_scan()
+
+        if is_holding_barrel(scans):
             # find YELLOW end zone and navigate to it until above yellow zone
             # check if above yellow
             if colour_sensor.is_blue(colour_sensor.read_colour()):
                 # then back out and turn fully around
-                motors.move_backward(50)
-                motors.turn_right(100)
+                motors.move_backward(speed)
+                motors.turn_right(80)
             else:
                 # find end zone
                 # pass frame to colour sensor and get yellow mask
@@ -249,7 +250,7 @@ if __name__ == "__main__":
                 blob_detec.process_image(colour_detec.yellow_mask)
                 points = blob_detec.blobs_info
                 if len(points) == 0:
-                    motors.turn_right(50)
+                    motors.turn_right(speed * 2)
                 else:
                     # determine movement to take based on where blob is in image
                     # find midpoint of blobs
@@ -267,14 +268,11 @@ if __name__ == "__main__":
                     speed = dist / 4000 * 100
 
                     if midpoint[0] < width // 2.5:
-                        motors.turn_left(speed)
+                        motors.turn_left(speed * 2)
                     elif midpoint[0] > width - (width // 2.5):
-                        motors.turn_right(speed)
+                        motors.turn_right(speed * 2)
                     else:
-                        if midpoint[1] < height // 2.5:
-                            motors.move_forward(min(speed * 2, 100))
-                        else:
-                            motors.move_forward(speed)
+                        motors.move_forward(speed * 2)
                 continue
         
         # keep turning to and finding barrels, if found then continue to next code

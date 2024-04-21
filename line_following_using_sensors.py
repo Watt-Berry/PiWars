@@ -9,119 +9,72 @@ camera -> to check if finished course
 
 
 from class_motor import MotorController
-from class_arduino import ColourSensor
 import PiMotor
 import RPi.GPIO as GPIO
 import time
-from inputs import get_gamepad
-
-
-# TODO: check if can place 3rd ir sensor on ultrasonic pins and have it working, HOPEFULLY IT DOES
 
 
 if __name__ == "__main__":
     motor_control = MotorController()
     motor_control.stop()
-    ir1 = PiMotor.Sensor("IR1", 5000) #left
-    #ir2 = ColourSensor("/dev/ttyUSB0") #middle
 
+    # ir sensors don't use boundary
+    ir1 = PiMotor.Sensor("IR1", 100) #left
+    ir2 = PiMotor.Sensor("ULTRASONIC", 100) #middle
+    ir3 = PiMotor.Sensor("IR2", 100) #right
 
-    ir2 = PiMotor.Sensor("ULTRASONIC", 5000) #FIRST SEE IF THIS WORKS
-
-    # IF NOT THEN TEST THIS
-    # ir2 = 31
-    # GPIO.setup(ir2, GPIO.IN)
-
-    # while True:
-    #     print(GPIO.input(ir2))
-
-
-    ir3 = PiMotor.Sensor("IR2", 5000) #right
-
-    speed = 15
-
-    # check if colour sensor is working
-    # try:
-    #     for i in range(10):
-    #         print(ir2.read_colour())
-    # except KeyboardInterrupt:
-    #     pass
-
-    # ^
-    # if working then ctrl C once
-    # if not working then ctrl C twice / stop program
+    speed = 50
 
     move = False
     prev_state = 0
 
-    try:
-        while True:
+    last_move = None
+    is_turn = False
 
-            # for toggling the motors to start/stop using the x button on gamepad
-            events = get_gamepad()
-            for event in events:
-                # if event.code == "BTN_NORTH":
-                #     ir2 = ColourSensor("/dev/ttyUSB0")
-                #     for i in range(10):
-                #         print(ir2.read_colour())
-                if event.code != "BTN_SOUTH": continue
-                if prev_state == 1 and event.state == 0:
-                    move = not move
-                    break
-                prev_state = event.state
-                
-            if not move:
-                motor_control.stop()
-                continue
-            
-            
+    try:
+        time.sleep(1)
+        while True:
             # get data from ir sensors
             ir1.iRCheck()
-            #ir2.iRCheck()
+            ir2.iRCheck()
             ir3.iRCheck()
-            
-            left_val = not ir1.Triggered
-            mid_val = not ir2.Triggered#True#not ir2.is_black(ir2.read_colour())
-            right_val = not ir3.Triggered
 
-            print(left_val, mid_val, right_val)
+            left_val = ir1.Triggered #not ir1.Triggered
+            mid_val = ir2.Triggered #not ir2.Triggered
+            right_val = ir3.Triggered #not ir3.Triggered
+
+            print(left_val, mid_val, right_val, speed)
 
             # Triggered True means sees black, False means sees white
-            # if left_val:
-            #     motor_control.turn_left(speed * 2)
-            # elif right_val:
-            #     motor_control.turn_right(speed * 2)
-            # elif mid_val:
-            #     motor_control.move_forward(speed)
-
-            # if left_val == mid_val == right_val == 0: #WWW
-            #     motor_control.stop()
-            #     break
-            # elif left_val == mid_val == right_val == 1: #BBB
-            #     motor_control.move_backward(speed)
-
-            if not left_val and not mid_val and not right_val: #WWW
+            new_move = last_move
+            if left_val == mid_val == right_val == 1: #WWW
                 motor_control.stop()
-            elif left_val and right_val: #WBW
-                motor_control.move_backward(speed // 2)
-            elif left_val: #WBB/ WWB
-                motor_control.turn_left(speed * 2)
-            elif right_val: #BBW/ BWW
-                motor_control.turn_right(speed * 2)
-            elif mid_val: #BWB
-                motor_control.move_forward(speed)
-            # elif not left_val and not mid_val and right_val: #WWB
-            #     motor_control.turn_right(speed * 2)
-            # elif not left_val and mid_val and not right_val: #WBW
-            #     motor_control.move_forward(speed)
-            # elif not left_val and mid_val and right_val: #WBB
-            #     motor_control.turn_right(speed * 2)
-            # elif left_val and not mid_val and not right_val: #BWW
-            #     motor_control.turn_left(speed * 2)
-            # elif left_val and not mid_val and right_val: #BWB
-            #     motor_control.move_backward(speed)
-            # elif left_val and mid_val and not right_val: #BBW
-            #     motor_control.turn_left(speed * 2)
+            elif left_val == mid_val == right_val == 0: #BBB
+                new_move = last_move
+            elif not left_val and not mid_val and right_val: #WWB
+                new_move = motor_control.turn_right
+                is_turn = True
+            elif not left_val and mid_val and not right_val: #WBW
+                new_move = motor_control.move_forward
+                is_turn = False
+            elif not left_val and mid_val and right_val: #WBB
+                new_move = motor_control.turn_right
+                is_turn = True
+            elif left_val and not mid_val and not right_val: #BWW
+                new_move = motor_control.turn_left
+                is_turn = True
+            elif left_val and not mid_val and right_val: #BWB
+                new_move = motor_control.move_backward
+                is_turn = False
+            elif left_val and mid_val and not right_val: #BBW
+                new_move = motor_control.turn_left
+                is_turn = True
+
+            if is_turn: new_move(min(speed * 1.5, 80))
+            else: new_move(speed)
+
+            last_move = new_move
 
     except KeyboardInterrupt:
+        motor_control.stop()
         pass

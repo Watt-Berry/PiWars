@@ -12,7 +12,7 @@ class ColourDetector:
         # each value will have the result and the mask
         self._colour_channels = {"BASE": None, "HSV": None,
                                  "RED": None, "GREEN": None, "BLUE": None, "YELLOW": None,
-                                 "GRAYSCALE": None}
+                                 "GRAYSCALE": None}#, "WHITE": None}
 
         self._masks = {"RED": None, "BLUE": None, "GREEN": None, "YELLOW": None}
 
@@ -49,6 +49,10 @@ class ColourDetector:
     @property
     def grayscale_channel(self):
         return self._colour_channels["GRAYSCALE"]
+    
+    # @property
+    # def white_channel(self):
+    #     return self._colour_channels["WHITE"]
 
     @property
     def red_mask(self):
@@ -97,13 +101,17 @@ class ColourDetector:
         # bitwise_and takes 2 hsv_images as src1 and src2 incase one of them is invalid?
         self._colour_channels["BLUE"] = cv2.cvtColor(cv2.bitwise_and(hsv_image, hsv_image, mask=blue_mask), cv2.COLOR_HSV2BGR)
 
-        green_mask = cv2.inRange(hsv_image, (40, 175, 50), (80, 255, 255))
+        green_mask = cv2.inRange(hsv_image, (40, 50, 50), (80, 255, 255))
         self._colour_channels["GREEN"] = cv2.cvtColor(cv2.bitwise_and(hsv_image, hsv_image, mask=green_mask), cv2.COLOR_HSV2BGR)
 
-        lower_red_mask = cv2.inRange(hsv_image, (0, 175, 50), (20, 255, 255))
-        upper_red_mask = cv2.inRange(hsv_image, (160, 175, 50), (179, 255, 255))
+        lower_red_mask = cv2.inRange(hsv_image, (0, 50, 50), (5, 255, 255))
+        upper_red_mask = cv2.inRange(hsv_image, (160, 50, 50), (179, 255, 255))
         # in hsv, the red color loops around so need 2 masks for the start and end
         red_mask = lower_red_mask + upper_red_mask
+
+        # white_mask = cv2.inRange(hsv_image, (0, 200, 200), (20, 255, 255))
+        # self._colour_channels["WHITE"] = cv2.cvtColor(cv2.bitwise_and(hsv_image, hsv_image, mask=white_mask), cv2.COLOR_HSV2BGR)
+
         self._colour_channels["RED"] = cv2.cvtColor(cv2.bitwise_and(hsv_image, hsv_image, mask=red_mask), cv2.COLOR_HSV2BGR)
 
         yellow_mask = cv2.inRange(hsv_image, (20, 175, 50), (40, 255, 255))

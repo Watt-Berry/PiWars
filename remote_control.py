@@ -2,7 +2,7 @@ from inputs import get_gamepad
 from class_motor import MotorController
 import RPi.GPIO as GPIO
 import math
-import cv2
+import serial
 
 
 """
@@ -18,7 +18,7 @@ left joystick -> movement
 right joystick x axis -> rotating left/right
 L1 -> decrease speed
 R1 -> increase speed
-TODO: button presses + functionality to shoot
+triangle -> toggle shooters on/off
 """
 
 
@@ -29,12 +29,18 @@ def get_speed(val: int) -> int:
 
 def set_movement(code: str, val: int):
     global speed, direction, rotation
+    global shoot
+
+    # check if the triangle was pressed/toggled
+    if code == "BTN_WEST" and val == 0:
+        shoot = not shoot
+
     # update the speed
     #speed = get_speed(val)
     if code == "BTN_TL":
-        speed = max(0, speed - 10)
+        speed = max(0, speed - 5)
     elif code == "BTN_TR":
-        speed = min(100, speed + 10)
+        speed = min(80, speed + 5)
 
     # handle left joystick for movement
     elif code == "ABS_X":
@@ -55,7 +61,6 @@ def set_movement(code: str, val: int):
             direction['y'] = 0
     # handle right joystick for rotation
     elif code == "ABS_Z":
-        print("rotation called")
         if val < 120:
             rotation = -1
         elif val > 130:
@@ -66,32 +71,32 @@ def set_movement(code: str, val: int):
 
 if __name__ == "__main__":
     motors = MotorController()
-    video = cv2.VideoCapture(0)
 
     direction = {'x': 0, 'y': 0}
     rotation, is_rotating = 0, False
+    shoot = False
     speed = 20
 
     while True:
         try:
-            # get and display frame
-            result, frame = video.read()
-            if result:
-                cv2.imshow("Robot View", frame)
-                cv2.waitKey(1)
-
-
             events = get_gamepad()
             for event in events:
                 if event.code == "SYN_REPORT":
                     continue
 
-                print(event.code)
-                print(event.state)
+                # print(event.code)
+                # print(event.state)
 
                 set_movement(event.code, event.state)
 
-                print(rotation)
+                # handle shoot toggle
+                if shoot:
+                    print("shoot is toggled on")
+                    with serial.Serial("/dev/ttyUSB1", baudrate=9600, timeout=1) as ser:
+                        ser.write(b'1')
+                    shoot = False
+
+                # print(rotation)
                 # handle rotations
                 if rotation == 0: 
                     motors.stop()

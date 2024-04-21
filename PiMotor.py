@@ -230,11 +230,7 @@ class Sensor:
     Triggered = False
     def iRCheck(self):
         input_state = GPIO.input(self.config["echo"])
-        if input_state == True:
-            print("Sensor 2: Object Detected")
-            self.Triggered = True
-        else:
-            self.Triggered = False
+        self.Triggered = input_state
 
     def sonicCheck(self):
         print("SonicCheck has been triggered")
